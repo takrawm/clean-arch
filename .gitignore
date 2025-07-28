@@ -1,0 +1,17 @@
+# Dependencies
+node_modules
+
+# Environment variables
+.env
+
+# Prisma
+/src/generated/prisma
+prisma/*.db
+prisma/*.db-journal
+
+# Build output
+/dist
+
+# IDE and OS files
+.vscode/
+*.DS_Store
