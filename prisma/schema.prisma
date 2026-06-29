@@ -1,19 +1,48 @@
 // This is your Prisma schema file,
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+//
+// --- このファイルと Prisma CLI の関係 ---
+// schema.prisma は DB と TypeScript コード双方の「設計図」。
+//
+//   npx prisma generate
+//     → 下記 generator の output 先に TypeScript コード（Prisma Client）を生成。
+//        Book 型、PrismaClient、prisma.book.create() 等が使えるようになる。
+//        dev.db 自体は変更しない。
+//
+//   npx prisma migrate dev --name <名前>
+//     → 下記 model 定義を prisma/dev.db（SQLite）に反映（テーブル作成・更新）。
+//        差分 SQL は prisma/migrations/ に保存される。
+//        初回セットアップ例: npx prisma migrate dev --name init
+//
+// モデルを変更したら: migrate dev →（必要なら）generate の順で両方更新する。
+//
+// --- DDL（Data Definition Language）との対応 ---
+// DDL = テーブル構造を定義・変更する SQL（CREATE TABLE, ALTER TABLE, DROP TABLE 等）。
+//
+//   【DDL そのもの】 prisma/migrations/<timestamp>_<name>/migration.sql
+//     migrate dev が model 定義から自動生成し、dev.db に実行する SQL ファイル。
+//     例: CREATE TABLE "Book" ("id" TEXT NOT NULL PRIMARY KEY, "title" TEXT NOT NULL, ...);
+//
+//   【DDL の元になる定義】 下記 model Book { ... } ブロック
+//     SQL ではない。Prisma 独自の宣言的スキーマ。migrate dev がここから DDL を生成する。
+//
+//   【DDL ではない】 prisma.book.create() / findUnique() 等のアプリコード
+//     これらは DML（INSERT, SELECT 等）で、テーブル構造の変更ではなくデータ操作。
 
 generator client {
+  // prisma generate の出力先。src-refactored / src-clean もここから import する。
   provider = "prisma-client-js"
-  output   = "../src/generated/prisma"
+  output   = "../src-layered/generated/prisma"
 }
 
 datasource db {
+  // migrate dev が接続する DB。URL は .env の DATABASE_URL（file:./dev.db → prisma/dev.db）
   provider = "sqlite"
   url      = env("DATABASE_URL")
 }
 
+// migrate dev 実行時、ここから DDL（CREATE TABLE 等）が生成され dev.db に適用される。
+// このブロック自体は SQL（DDL）ではなく、DDL を生成するための宣言的な定義。
 model Book {
   id String @id @default(uuid())
   title String

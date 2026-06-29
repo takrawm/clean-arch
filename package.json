@@ -4,8 +4,14 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "ts-node-dev --respawn --transpile-only src/app.ts",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "ts-node-dev --respawn --transpile-only src-layered/app.ts",
+    "dev:refactored": "ts-node-dev --respawn --transpile-only src-refactored/app.ts",
+    "dev:clean": "ts-node-dev --respawn --transpile-only src-clean/infrastructure/web/app.ts",
+    "dev:sec3": "ts-node-dev --respawn --transpile-only sec3-library-app/src/app.ts",
+    "dev:sec4": "ts-node-dev --respawn --transpile-only sec4-library-app/src/app.ts",
+    "dev:sec5": "ts-node-dev --respawn --transpile-only sec5-library-app/src/infrastructure/web/app.ts",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "generate": "ts-node tools/generateFiles.ts"
   },
   "keywords": [],
   "author": "",
@@ -13,11 +19,14 @@
   "type": "commonjs",
   "dependencies": {
     "@prisma/client": "^6.12.0",
-    "express": "^5.1.0"
+    "express": "^5.1.0",
+    "uuid": "^14.0.1"
   },
   "devDependencies": {
     "@types/express": "^5.0.3",
+    "@types/inquirer": "^9.0.10",
     "@types/node": "^24.1.0",
+    "inquirer": "^14.0.2",
     "prisma": "^6.12.0",
     "ts-node-dev": "^2.0.0",
     "typescript": "^5.8.3"
